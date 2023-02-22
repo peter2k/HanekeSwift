@@ -9,13 +9,17 @@
 import Foundation
 
 open class DiskCache {
+    public static var appGroupPath: NSString?
     
     open class func basePath() -> String {
-        let cachesPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let hanekePathComponent = HanekeGlobals.Domain
-        let basePath = (cachesPath as NSString).appendingPathComponent(hanekePathComponent)
-        // TODO: Do not recaculate basePath value
-        return basePath
+
+        if let appGroupPath {
+            return appGroupPath.appendingPathComponent(hanekePathComponent)
+        } else {
+            let cachesPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+            return (cachesPath as NSString).appendingPathComponent(hanekePathComponent)
+        }
     }
     
     public let path: String
